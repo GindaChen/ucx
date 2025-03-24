@@ -1116,14 +1116,19 @@ const char *ucs_sockaddr_address_family_str(sa_family_t af)
 
 ucs_status_t ucs_sockaddr_get_ip_local_port_range(ucs_range_spec_t *port_range)
 {
+    const char *path = getenv("UCX_IP_LOCAL_PORT_RANGE");
     char ip_local_port_range[32];
     char *endptr;
     ssize_t nread;
 
+    if (path == NULL) {
+        path = UCX_PROCESS_IP_PORT_RANGE;
+    }
+
     nread = ucs_read_file_str(ip_local_port_range, sizeof(ip_local_port_range),
-                              1, UCX_PROCESS_IP_PORT_RANGE);
+                              1, path);
     if (nread < 0) {
-        ucs_diag("failed to read " UCX_PROCESS_IP_PORT_RANGE);
+        ucs_diag("failed to read %s", path);
         return UCS_ERR_IO_ERROR;
     }
 

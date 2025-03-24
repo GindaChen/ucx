@@ -1126,7 +1126,7 @@ ucs_status_t ucs_sockaddr_get_ip_local_port_range(ucs_range_spec_t *port_range)
     }
 
     nread = ucs_read_file_str(ip_local_port_range, sizeof(ip_local_port_range),
-                              1, path);
+                              1, "%s", path);
     if (nread < 0) {
         ucs_diag("failed to read %s", path);
         return UCS_ERR_IO_ERROR;
